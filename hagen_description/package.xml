@@ -1,0 +1,8 @@
+<package format="3">
+  <name>hagen_description</name>
+  <version>0.0.1</version>
+  <description>URDF and world for Hagen robot</description>
+  <maintainer email="p.belayev@innopolis.university">Petr</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+</package>

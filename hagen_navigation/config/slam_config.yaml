@@ -1,0 +1,4 @@
+slam_toolbox:
+  use_sim_time: true
+  slam_mode: true
+  map_update_interval: 2.0

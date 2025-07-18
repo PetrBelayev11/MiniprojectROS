@@ -1,0 +1,9 @@
+<package format="3">
+  <name>hagen_navigation</name>
+  <version>0.0.1</version>
+  <description>SLAM config and launch for Hagen</description>
+  <maintainer email="p.belayev@innopolis.university">Petr</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>slam_toolbox</exec_depend>
+</package>
