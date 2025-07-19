@@ -1,45 +1,32 @@
-
-
-from launch import LaunchDescription
-from launch_ros.actions import Node
-from launch.actions import GroupAction
-from launch_ros.substitutions import FindPackageShare
 import os
-
-def generate_robot_group(robot_name, x_pose, y_pose):
-    robot_description_pkg = FindPackageShare('hagen_description').find('hagen_description')
-    urdf_file = os.path.join(robot_description_pkg, 'urdf', 'hagen.urdf')
-
-    return GroupAction([
-        Node(
-            package='robot_state_publisher',
-            executable='robot_state_publisher',
-            namespace=robot_name,
-            name='robot_state_publisher',
-            parameters=[{'robot_description': open(urdf_file).read()}],
-            output='screen'
-        ),
-
-        Node(
-            package='gazebo_ros',
-            executable='spawn_entity.py',
-            arguments=['-entity', robot_name,
-                       '-x', str(x_pose), '-y', str(y_pose),
-                       '-topic', f'/{robot_name}/robot_description'],
-            output='screen'
-        ),
-
-        Node(
-            package='teleop_twist_keyboard',
-            executable='teleop_twist_keyboard',
-            name=f'{robot_name}_teleop',
-            remappings=[('/cmd_vel', f'/{robot_name}/cmd_vel')],
-            prefix='xterm -e '
-        )
-    ])
-
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import ThisLaunchFileDir,LaunchConfiguration
+from launch_ros.actions import Node
+from launch.actions import ExecuteProcess
+from ament_index_python.packages import get_package_share_directory
+ 
 def generate_launch_description():
+    use_sim_time = LaunchConfiguration('use_sim_time', default='True')
+    world_file_name = 'hagen_world.world'
+    pkg_dir = get_package_share_directory('hagen_robot_diff_drive')
+ 
+    os.environ["GAZEBO_MODEL_PATH"] = os.path.join(pkg_dir, 'models')
+ 
+    world = os.path.join(pkg_dir, 'worlds', world_file_name)
+    launch_file_dir = os.path.join(pkg_dir, 'launch')
+ 
+    gazebo = ExecuteProcess(
+            cmd=['gazebo', '--verbose', world, '-s', 'libgazebo_ros_init.so', 
+            '-s', 'libgazebo_ros_factory.so'],
+            output='screen')
+ 
+    spawn_entity = Node(package='hagen_robot_diff_drive', executable='spawn_robot',
+                        arguments=['HagenRobot', 'hagen_robot', '0.0', '0.0', '0.0'],
+                        output='screen')
+ 
     return LaunchDescription([
-        generate_robot_group('robot1', 0.0, 0.0),
-        generate_robot_group('robot2', 2.0, 0.0),
+        gazebo,
+        spawn_entity,
     ])

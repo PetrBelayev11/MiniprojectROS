@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hagen_robot_diff_drive</name>
+  <version>0.0.1</version>
+  <description>Basic spawning and control for Hagen robot.</description>
+
+  <maintainer email="ogganesontennesin@gmail.com">Petr</maintainer>
+
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>gazebo_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+</package>
